@@ -1,0 +1,7 @@
+calc
+lexer.c
+parser.c
+parser.h
+*.o
+*.dot
+*.output
