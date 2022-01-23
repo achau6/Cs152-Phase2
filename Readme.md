@@ -30,8 +30,7 @@ Use 'git' to clone the project template:
     git clone <your-repo-link> lab2
 ```
 
-Move your code in Lab1 into this new repository. Please do not directly overwrite the calc.lex file.
-Change the rules based on the knowledge your learnt in Lab 2.
+Move your code in Lab1 into this new repository. Please do not directly overwrite the calc.lex file. Change the rules based on the knowledge you learned in Lab 2.
 
 ## Check Your Tasks for Lab 2
 
@@ -39,21 +38,21 @@ Read the documentation of Lab2 and your tasks in [home page for lab2](https://ww
 
 ## Using Bison to generate C source code of Parser
 
-Modify both calc.lex and calc.y to create the parser of calculator. Run the following command to generate a header which contains all the token definitions and a piece of C source code of the parser.
+Modify both calc.lex and calc.y to create the parser of the calculator. Run the following command to generate a header that contains all the token definitions and a piece of C source code of the parser.
 
 ```sh
     bison -v -g -d -o parser.c calc.y  # it generates parser.h, parser.c, parser.output and parser.dot
 ```
 
 * `-d` option will let bison generate the header file `parser.h`, contains token and function definitions 
-* `-v` option will generate `parser.output` which is a debugging file shows the inner states and rules
-* `-g` option generate a GraphViz dot file `parser.dot` which represents the pushdown automaton generated.
+* `-v` option will generate `parser.output` which is a debugging file that shows the inner states and rules
+* `-g` option will generate a GraphViz dot file `parser.dot` which represents the pushdown automaton generated
 
 
 ## Keep your progress by uploading to Github
 
-After you finish all 4 tasks, you are done the second part of this lab. You don't need to submit the code.
-Similalily, uploading to Github can keep your progress:
+After you finish all 4 tasks, you are done with the second part of this lab. You don't need to submit the code.
+Similarly, uploading to Github can keep your progress:
 
 ```sh
 git add .  # add all files under current folder to staged changes
