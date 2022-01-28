@@ -1,0 +1,109 @@
+function       {return FUNCTION; pos += yyleng;}
+beginparams    {return BEGIN_PARAMS; pos+=yyleng;}
+endparams      {return END_PARAMS; pos += yyleng;}
+beginlocals    {return BEGIN_LOCALS; pos += yyleng;}
+endlocals      {return END_LOCALS; pos += yyleng;}
+beginbody      {return BEGIN_BODY; pos += yyleng;}
+endbody        {return END_BODY; pos += yyleng;}
+integer        {return INTEGER; pos += yyleng;}
+array          {return ARRAY; pos += yyleng;}
+of             {return OF; pos += yyleng;}
+if             {return IF; pos += yyleng;}
+then           {return THEN; pos += yyleng;}
+endif          {return ENDIF; pos += yyleng;}
+else           {return ELSE; pos += yyleng;}
+while          {return WHILE; pos += yyleng;}
+do             {return DO; pos += yyleng;}
+beginloop      {return BEGINLOOP; pos += yyleng;}
+endloop        {return ENDLOOP; pos += yyleng;}
+continue       {return CONTINUE; pos += yyleng;}
+break          {return BREAK; pos += yyleng;}
+read           {return READ; pos += yyleng;}
+write          {return WRITE; pos += yyleng;}
+not            {return NOT; pos += yyleng;}
+true           {return TRUE; pos += yyleng;}
+false          {return FALSE; pos += yyleng;}
+return         {return RETURN; pos += yyleng;}
+"-"            {return SUB; pos += yyleng;}
+"+"            {return ADD; pos += yyleng;}
+"*"            {return MULT; pos += yyleng;}
+"/"            {return DIV; pos += yyleng;}
+"%"            {return MOD; pos += yyleng;}
+";"            {return SEMICOLON; pos += yyleng;}
+":"            {return COLON; pos += yyleng;}
+","            {return COMMA; pos += yyleng;}
+"("            {return L_PAREN; pos += yyleng;}
+")"            {return R_PAREN; pos += yyleng;}
+"["            {return L_SQUARE_BRACKET; pos += yyleng;}
+"]"            {return R_SQUARE_BRACKET; pos += yyleng;}
+"=="           {return EQ; pos += yyleng;}
+"<>"           {return NEQ; pos += yyleng;}
+"<"            {return LT; pos += yyleng;}
+">"            {return GT; pos += yyleng;}
+"<="           {return LTE; pos += yyleng;}
+">="           {return GTE; pos += yyleng;}
+":="           {return ASSIGN; pos += yyleng;}
+("##").*       {pos += yyleng;}
+[ \t]+         {pos += yyleng;}
+"\n"           {line++; pos = 1;}
+{IDENTIFIER_WORD}   {yylval.identval = atoi(yytext); return IDENT; pos += yyleng;}
+{IDENTIFIER_WORD_ERROR}       printf("Start Error at line %d, column %d: can not begin \"%s\"\n", line, pos, yytext);
+{IDENTIFIER_WORD_ERROR_TWO}   printf("End Error at line %d, column %d: can not end \"%s\"\n", line, pos, yytext);
+.              {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", line, pos, yytext); exit(0);}
+
+
+Program: NUMBER {
+   printf("In parsers: %d\n", $1);
+};
+
+Identifiers: Identifier {
+   printf("Identifiers -> Identifier\n");
+} | Identifier COMMA Identifiers {
+   printf("Identifier -> Ident COMMA Identifiers\n");
+};
+
+function       {printf("FUNCTION\n"); pos += yyleng;}
+beginparams    {printf("BEGIN_PARAMS\n"); pos+=yyleng;}
+endparams      {printf("END_PARAMS\n"); pos += yyleng;}
+beginlocals    {printf("BEGIN_LOCALS\n"); pos += yyleng;}
+endlocals      {printf("END_LOCALS\n"); pos += yyleng;}
+beginbody      {printf("BEGIN_BODY\n"); pos += yyleng;}
+endbody        {printf("END_BODY\n"); pos += yyleng;}
+integer        {printf("INTEGER\n"); pos += yyleng;}
+array          {printf("ARRAY\n"); pos += yyleng;}
+of             {printf("OF\n"); pos += yyleng;}
+if             {printf("IF\n"); pos += yyleng;}
+then           {printf("THEN\n"); pos += yyleng;}
+endif          {printf("ENDIF\n"); pos += yyleng;}
+else           {printf("ELSE\n"); pos += yyleng;}
+while          {printf("WHILE\n"); pos += yyleng;}
+do             {printf("DO\n"); pos += yyleng;}
+beginloop      {printf("BEGINLOOP\n"); pos += yyleng;}
+endloop        {printf("ENDLOOP\n"); pos += yyleng;}
+continue       {printf("CONTINUE\n"); pos += yyleng;}
+break          {printf("BREAK\n"); pos += yyleng;}
+read           {printf("READ\n"); pos += yyleng;}
+write          {printf("WRITE\n"); pos += yyleng;}
+not            {printf("NOT\n"); pos += yyleng;}
+true           {printf("TRUE\n"); pos += yyleng;}
+false          {printf("FALSE\n"); pos += yyleng;}
+return         {printf("RETURN\n"); pos += yyleng;}
+"-"            {printf("SUB\n"); pos += yyleng;}
+"+"            {printf("ADD\n"); pos += yyleng;}
+"*"            {printf("MULT\n"); pos += yyleng;}
+"/"            {printf("DIV\n"); pos += yyleng;}
+"%"            {printf("MOD\n"); pos += yyleng;}
+";"            {printf("SEMICOLON\n"); pos += yyleng;}
+":"            {printf("COLON\n"); pos += yyleng;}
+","            {printf("COMMA\n"); pos += yyleng;}
+"("            {printf("L_PAREN\n"); pos += yyleng;}
+")"            {printf("R_PAREN\n"); pos += yyleng;}
+"["            {printf("L_SQUARE_BRACKET\n"); pos += yyleng;}
+"]"            {printf("R_SQUARE_BRACKET\n"); pos += yyleng;}
+"=="           {printf("EQ\n"); pos += yyleng;}
+"<>"           {printf("NEQ\n"); pos += yyleng;}
+"<"            {printf("LT\n"); pos += yyleng;}
+">"            {printf("GT\n"); pos += yyleng;}
+"<="           {printf("LTE\n"); pos += yyleng;}
+">="           {printf("GTE\n"); pos += yyleng;}
+":="           {printf("ASSIGN\n"); pos += yyleng;}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 calc
 lexer.c
 parser.c
@@ -5,3 +6,12 @@ parser.h
 *.o
 *.dot
 *.output
+=======
+*.o
+*.dot
+*.output
+miniL
+miniL-lex.c
+miniL-parser.c
+miniL-parser.h
+>>>>>>> 326b23870f2b7bc1dc4d41d2998f9ab294729461

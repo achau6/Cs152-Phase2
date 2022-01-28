@@ -2,7 +2,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-FILE * yyin;
+extern FILE * yyin;
 void yyerror(const char *msg);
 
 %}
@@ -12,7 +12,7 @@ void yyerror(const char *msg);
   char* identval
 }
 
-%error-verbose
+%define parse.error verbose
 %locations
 
 /*Rename to program because of syntax document*/
@@ -68,45 +68,65 @@ void yyerror(const char *msg);
 %left GTE
 %right ASSIGN
 
-
 %% 
 
-Program: %empty {
-   printf("Program -> epsilon\n");
+Program: Functions {printf("Program -> Functions\n");};
+
+Functions: %empty {
+   printf("Functions -> epsilon\n");
+}  | Function Functions {
+   printf("Functions -> Function Functions\n");
+
 };
 
-Program: NUMBER {
-    printf("In parsers: %d\n", $1);
+Identifier: IDENT {printf("ident -> IDENT %s\n", yylval.identval);};
+Identifiers: Identifier {printf("Identifiers -> Identifier\n");};
+
+Function: FUNCTION Identifier SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEGIN_LOCALS Declarations END_LOCALS BEGIN_BODY Statements END_BODY {
+   printf("Function -> FUNCTION Identifier SEMICOLON BEGIN_PARAMS Declarations SEMICOLON END_PARAMS BEGIN_LOCALS Declarations SEMICOLON END_LOCALS BEGIN_BODY Statements SEMICOLON END_BODY\n");
 };
 
-Function: FUNCTION Identifiers SEMICOLON BEGIN_PARAMS Declarations SEMICOLON END_PARAMS BEGIN_LOCALS Declarations SEMICOLON END_LOCALS BEGIN_BODY Statements SEMICOLON END_BODY {
-   printf("Function -> FUNCTION Identifiers SEMICOLON BEGIN_PARAMS Declarations SEMICOLON END_PARAMS BEGIN_LOCALS Declarations SEMICOLON END_LOCALS BEGIN_BODY Statements SEMICOLON END_BODY\n");
-};
-
-Declarations: Identifiers COLON INTEGER {
-   printf("Declarations -> Identifiers COLON INTEGER\n");
-} | Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER {
-   printf("Declarations -> Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");
-} | %empty{
+Declarations: %empty {
    printf("Declarations -> epsilon\n");
+} | Declaration SEMICOLON Declarations {
+   printf("Declarations -> Declaration SEMICOLON Declarations\n");
 };
 
-Statements: Var ASSIGN Expression {
-   printf("Statements -> Var ASSIGN Expression\n");
+Declaration: Identifiers COLON INTEGER {
+   printf("Declaration -> Identifiers COLON INTEGER\n");
+} | Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER {
+   printf("Declaration -> Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");
+};
+
+Statements: %empty {
+   printf("Statements -> epsilon\n");
+}  | Statement SEMICOLON Statements {
+   printf("Statements -> Statement SEMICOLON Statements\n");
+};
+
+ElseStatement: ELSE Statements {
+   printf("ElseStatement -> ELSE Statements\n");
+} | %empty {
+   printf("ElseStatement -> epsilon");
+};
+Statement: Var ASSIGN Expression {
+   printf("Statement -> Var ASSIGN Expression\n");
+} | IF BoolExp THEN Statements ElseStatement ENDIF {
+   printf("Statement -> IF BoolExp THEN Statements ElseStatement ENDIF\n");
 } | WHILE BoolExp BEGINLOOP Statements ENDLOOP {
-   printf("Statements -> WHILE BoolExp BEGINLOOP Statements ENDLOOP\n");
+   printf("Statement -> WHILE BoolExp BEGINLOOP Statements ENDLOOP\n");
 } | DO BEGINLOOP Statements ENDLOOP WHILE BoolExp {
-   printf("Statements -> DO BEGINLOOP Statements ENDLOOP WHILE BoolExp\n");
+   printf("Statement -> DO BEGINLOOP Statements ENDLOOP WHILE BoolExp\n");
 } | READ Var {
-   printf("Statements -> READ Var\n");
+   printf("Statement -> READ Var\n");
 } | WRITE Var {
-   printf("Statements -> WRITE Var\n");
+   printf("Statement -> WRITE Var\n");
 } | CONTINUE {
-   printf("Statements -> CONTINUE\n");
+   printf("Statement -> CONTINUE\n");
 } | BREAK {
-   printf("Statements -> BREAK\n");
+   printf("Statement -> BREAK\n");
 } | RETURN Expression {
-   printf("Statements -> RETURN Expression\n");
+   printf("Statement -> RETURN Expression\n");
 };
 
 
@@ -154,34 +174,28 @@ Term:  Var {
    printf("Term -> NUMBER\n");
 } | L_PAREN Expression R_PAREN {
    printf("Term -> L_PAREN Expression R_PAREN\n");
-} | Identifiers L_PAREN Expression R_PAREN {
+} | Identifier L_PAREN Expression R_PAREN {
    printf("Term -> L_PAREN Expression R_PAREN\n");
-} | Identifiers L_PAREN Expression COMMA R_PAREN { /*Check this rule*/
+} | Identifier L_PAREN Expression COMMA R_PAREN { /*Check this rule*/
    printf("Term -> L_PAREN Expression COMMA R_PAREN\n"); 
-} | Identifiers L_PAREN R_PAREN {
+} | Identifier L_PAREN R_PAREN {
    printf("Term -> L_PAREN R_PAREN\n");
 }; 
 
-Var: Identifiers {
-   printf("Var -> Identifiers\n");
-} | Identifiers L_SQUARE_BRACKET Expression R_SQUARE_BRACKET {
-   printf("Var -> Identifiers L_SQUARE_BRACKET Expression R_SQUARE_BRACKET\n");
+Var: Identifier {
+   printf("Var -> Identifier\n");
+} | Identifier L_SQUARE_BRACKET Expression R_SQUARE_BRACKET {
+   printf("Var -> Identifier L_SQUARE_BRACKET Expression R_SQUARE_BRACKET\n");
 };
 
-Identifiers: Identifiers {
-   printf("Identifiers -> Identifier\n");
-} | Identifiers COMMA Identifiers{
-   printf("Identifiers -> Ident COMMA Identifiers\n");
-};
 
-;
 %% 
 
 int main(int argc, char **argv) {
    if (argc > 1) {
       yyin = fopen(argv[1], "r");
       if (yyin == 0) {
-         printf("Error Open File %s\n", argv);
+         printf("Error Open File %s\n", argv[0]);
       }
    }
    yyparse();

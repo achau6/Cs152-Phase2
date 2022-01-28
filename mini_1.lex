@@ -2,7 +2,7 @@
 
 %{
    /* write your C code here for defination of variables and including headers */
-#include "parser.h"
+   #include "parser.h"
    #include "y.tab.h"
    
    int pos = 0;
@@ -13,6 +13,8 @@
    /* some common rules, for example DIGIT */
 DIGIT    [0-9]
 LETTERS                    [a-zA-Z]
+CHAR                       [0-9a-zA-Z_]
+ALPHANUMBER                [0-9a-zA-Z]
 IDENTIFIER_WORD            {LETTERS}({LETTERS}|[_]|{DIGIT})*(({LETTERS}|DIGIT)+)*
 IDENTIFIER_WORD_ERROR      ({DIGIT}|[_])({LETTERS}|[_]|{DIGIT})*(({LETTERS}|DIGIT)+)*
 IDENTIFIER_WORD_ERROR_TWO  {LETTERS}(({LETTERS}|[_]|{DIGIT})*({LETTERS}|DIGIT)+[_])*
@@ -68,10 +70,10 @@ return         {return RETURN; pos += yyleng;}
 "<="           {return LTE; pos += yyleng;}
 ">="           {return GTE; pos += yyleng;}
 ":="           {return ASSIGN; pos += yyleng;}
-("##").*       {pos += yyleng;}
+("##").*       {line += yyleng;}
 [ \t]+         {pos += yyleng;}
-"\n"           {line++; pos = 1;}
-{IDENTIFIER_WORD}   {printf("IDENT %s\n", yytext); pos += yyleng;}
+"\n"           {line ++; pos = 0;}
+{LETTERS}({CHAR}*{ALPHANUMBER}+)?  {yylval.identval = atoi(yytext); return IDENT; pos += yyleng;}
 {IDENTIFIER_WORD_ERROR}       printf("Start Error at line %d, column %d: can not begin \"%s\"\n", line, pos, yytext);
 {IDENTIFIER_WORD_ERROR_TWO}   printf("End Error at line %d, column %d: can not end \"%s\"\n", line, pos, yytext);
 .              {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", line, pos, yytext); exit(0);}
