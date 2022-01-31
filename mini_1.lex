@@ -73,7 +73,7 @@ return         {return RETURN; pos += yyleng;}
 ("##").*       {line += yyleng;}
 [ \t]+         {pos += yyleng;}
 "\n"           {line ++; pos = 0;}
-{LETTERS}({CHAR}*{ALPHANUMBER}+)?  {yylval.identval = atoi(yytext); return IDENT; pos += yyleng;}
+{IDENTIFIER_WORD}  	      {yylval.identval = yytext; return IDENT; pos += yyleng;}
 {IDENTIFIER_WORD_ERROR}       printf("Start Error at line %d, column %d: can not begin \"%s\"\n", line, pos, yytext);
 {IDENTIFIER_WORD_ERROR_TWO}   printf("End Error at line %d, column %d: can not end \"%s\"\n", line, pos, yytext);
 .              {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", line, pos, yytext); exit(0);}
