@@ -107,7 +107,7 @@ Statements: %empty {
 ElseStatement: ELSE Statements {
    printf("ElseStatement -> ELSE Statements\n");
 } | %empty {
-   printf("ElseStatement -> epsilon");
+   printf("ElseStatement -> epsilon\n");
 };
 Statement: Var ASSIGN Expression {
    printf("Statement -> Var ASSIGN Expression\n");
