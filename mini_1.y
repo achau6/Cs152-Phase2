@@ -1,4 +1,4 @@
-/* calculator. */
+/* cs152-miniL.y. */
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -148,6 +148,8 @@ Comp: ASSIGN {
    printf("Comp -> LTE\n");
 } | GTE {
    printf("Comp -> GTE\n");
+}  | EQ {
+   printf("Comp -> EQ\n");
 };
 
 Expression: MultExp {
@@ -158,14 +160,15 @@ Expression: MultExp {
    printf("Expression -> MultExp SUB Expression\n");
 }; 
 
+
 MultExp: Term {
    printf("MultExp -> Term\n");
-} | MultExp Term MULT MultExp{
-   printf("MultExp -> Term MULT MultExp\n");
-} | MultExp Term DIV MultExp{
-   printf("MultExp -> Term DIV MultExp\n");
-} | MultExp Term MOD MultExp{
-   printf("MultExp -> Term MOD MultExp\n");
+} | Term MULT Term{
+   printf("MultExp -> Term MULT Term\n");
+} | Term DIV Term{
+   printf("MultExp -> Term DIV Term\n");
+} | Term MOD Term{
+   printf("MultExp -> Term MOD Term\n");
 }; 
 
 Term:  Var {

@@ -1,4 +1,4 @@
-   /* cs152-calculator */
+   /* cs152-miniL-lex    */
 
 %{
    /* write your C code here for defination of variables and including headers */
